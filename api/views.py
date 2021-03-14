@@ -9,4 +9,4 @@ def index(request):
 
 @csrf_exempt
 def test(request):
-    return HttpResponse("posted data: \n" + str(request.POST.items()))
+    return HttpResponse("posted data: \n" + request.POST.items())
