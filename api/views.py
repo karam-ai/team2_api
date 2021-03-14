@@ -8,4 +8,4 @@ def index(request):
 
 
 def test(request):
-    return HttpResponse(request.POST.items())
+    return HttpResponse("posted data: \n" + str(request.POST.items()))
