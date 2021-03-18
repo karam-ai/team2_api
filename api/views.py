@@ -39,3 +39,5 @@ def add_information(request):
             return JsonResponse({'status': '200'})
         except Exception as e:
             return HttpResponse("something is wrong with it" + str(e))
+    else:
+        return HttpResponse("you used GET, please use POST")
