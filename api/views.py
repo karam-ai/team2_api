@@ -28,6 +28,7 @@ def test(request):
 @csrf_exempt
 # POST DATA TO DB
 def add_information(request):
+    print("Qarsum super power: ", request.body)
     if request.method == 'POST':
         try:
 
