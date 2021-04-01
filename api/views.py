@@ -25,13 +25,18 @@ def test(request):
         return HttpResponse("you used GET, please use POST")
 
 
+import base64
+
+
 @csrf_exempt
 # POST DATA TO DB
 def add_information(request):
     print("Qarsum super power: ", request.body)
+
+    coded_string = request.body['payload_row']
+    print("Mooza super powers: ", base64.b64decode(coded_string))
     if request.method == 'POST':
         try:
-
             info = Information.objects.create(drone_name=request.POST['drone_name'],
                                               drone_number=request.POST['drone_number'],
                                               long=request.POST['long'],
@@ -42,3 +47,8 @@ def add_information(request):
             return HttpResponse("something is wrong with it" + str(e))
     else:
         return HttpResponse("you used GET, please use POST")
+
+
+def get_information(request, pk):
+    if request.method == 'GET':
+        return JsonResponse({"measurements": None})
