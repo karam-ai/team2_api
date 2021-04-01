@@ -33,8 +33,8 @@ import base64
 def add_information(request):
     print("Qarsum super power: ", request.body)
 
-    coded_string = request.body['payload_row']
-    print("Mooza super powers: ", base64.b64decode(coded_string))
+    coded_string = request.POST['payload_raw']
+    print("Mooza super powers: ", base64.b64decode(coded_string).decode('UTF-8'))
     if request.method == 'POST':
         try:
             info = Information.objects.create(drone_name=request.POST['drone_name'],

@@ -14,12 +14,34 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from api.views import *
+from api.models import Drone
+from rest_framework import routers, serializers, viewsets
+
+
+# Serializers define the API representation.
+class DroneSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Drone
+        fields = ['dev_id', 'hardware_serial', 'payload_row', 'meta_data']
+
+
+# ViewSets define the view behavior.
+class DroneViewSet(viewsets.ModelViewSet):
+    queryset = Drone.objects.all()
+    serializer_class = DroneSerializer
+
+
+# Routers provide an easy way of automatically determining the URL conf.
+router = routers.DefaultRouter()
+router.register(r'users', DroneViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index, name='index'),
+    # path('', index, name='index'),
+    path('', include(router.urls)),
     path('test/', test, name='test'),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('add_information/', add_information, name='add_information')
 ]
