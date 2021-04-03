@@ -3,6 +3,8 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.http import JsonResponse
 from .models import *
+from api.models import Drone
+from rest_framework import routers, serializers, viewsets, permissions
 
 
 # Create your views here.
@@ -52,3 +54,40 @@ def add_information(request):
 def get_information(request, pk):
     if request.method == 'GET':
         return JsonResponse({"measurements": None})
+
+
+# Serializers define the API representation.
+class DroneSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Drone
+        fields = ['dev_id', 'hardware_serial', 'payload_row', 'meta_data']
+
+
+# ViewSets define the view behavior.
+class DroneViewSet(viewsets.ModelViewSet):
+    queryset = Drone.objects.all()
+    serializer_class = DroneSerializer
+
+
+# Routers provide an easy way of automatically determining the URL conf.
+router = routers.DefaultRouter()
+router.register(r'drones', DroneViewSet)
+
+
+# Serializers define the API representation.
+class MeasuresSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Drone
+        fields = '__all__'
+
+
+# ViewSets define the view behavior.
+class MeasuresViewSet(viewsets.ModelViewSet):
+    queryset = Measures.objects.all()
+    serializer_class = MeasuresSerializer
+
+
+# Routers provide an easy way of automatically determining the URL conf.
+router = routers.DefaultRouter()
+router.register(r'drones', DroneViewSet)
+router.register(r'Measures', MeasuresViewSet)

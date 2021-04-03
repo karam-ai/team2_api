@@ -5,7 +5,6 @@ from django.db import models
 
 
 class Information(models.Model):
-
     drone_name = models.CharField(max_length=50, blank=True)
     drone_number = models.CharField(max_length=50, blank=True)
     long = models.FloatField(default=0, blank=True)
@@ -13,6 +12,13 @@ class Information(models.Model):
 
 
 class Drone(models.Model):
+    dev_id = models.CharField(max_length=500, blank=True)
+    hardware_serial = models.CharField(max_length=500, blank=True)
+    payload_row = models.CharField(max_length=5000, blank=True)
+    meta_data = models.DateTimeField(blank=True)
+
+
+class Measures(models.Model):
     dev_id = models.CharField(max_length=500, blank=True)
     hardware_serial = models.CharField(max_length=500, blank=True)
     payload_row = models.CharField(max_length=5000, blank=True)
