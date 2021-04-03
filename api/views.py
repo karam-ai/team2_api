@@ -18,6 +18,7 @@ def addData(request):
     serializer = request.data
     print(serializer)
     key = serializer['payload_raw']
+    print("payload_raw type:", type(key), ", value", key)
     payload = json.loads(base64.b64decode(key).decode('UTF-8'))
     print("payload: ", type(payload), payload)
     print('drone_id: ', get_drone_id_from_dev_id(serializer))
@@ -31,8 +32,7 @@ def get_drone_id_from_dev_id(serializer):
         drone = Drone.objects.get(dev_id=serializer['dev_id'])
         return drone.id
     except:
-        new_drone = Drone.objects.create(dev_id=serializer['dev_id'], hardware_serial=serializer['hardware_serial'],
-                                         )
+        new_drone = Drone.objects.create(dev_id=serializer['dev_id'], hardware_serial=serializer['hardware_serial'])
         new_drone.save()
         return new_drone.id
 
@@ -65,5 +65,5 @@ class MeasuresViewSet(viewsets.ModelViewSet):
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
-router.register(r'drones', DroneViewSet)
+router.register(r'Drones', DroneViewSet)
 router.register(r'Measures', MeasuresViewSet)
