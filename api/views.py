@@ -19,7 +19,24 @@ def addData(request):
     print(serializer)
     key = serializer['payload_raw']
     print("payload_raw type:", type(key), ", value", key)
-    payload = json.loads(base64.b64decode(key).decode('UTF-8'))
+    payload_str = base64.b64decode(key).decode('UTF-8')
+    payload_str_test = str({"key": "1999"}).replace("'", '"')
+
+    payload_str = str(payload_str).replace("'", '"').replace("\n", "").replace(" ", "")
+
+    print("payload_str_test:", payload_str_test)
+
+    print("payload_str:", payload_str)
+    chrs = []
+    for i in payload_str:
+        chrs.append(i)
+
+    for i in chrs:
+        print(i, payload_str.count(i))
+
+    print("are they the same?:", len(payload_str), len(payload_str_test))
+
+    payload = json.loads(payload_str)
     print("payload: ", type(payload), payload)
     print('drone_id: ', get_drone_id_from_dev_id(serializer))
     measures = Measures.objects.create(drone_id=get_drone_id_from_dev_id(serializer), key='key', value=payload['key'])

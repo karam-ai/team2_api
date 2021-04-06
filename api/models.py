@@ -21,3 +21,4 @@ class Measures(models.Model):
     drone = models.ForeignKey(Drone, on_delete=models.CASCADE)
     key = models.CharField(max_length=50, blank=True)  # PH
     value = models.CharField(max_length=50, blank=True)  # 7
+

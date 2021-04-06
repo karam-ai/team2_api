@@ -1,3 +1,19 @@
-from django.test import TestCase
-
-# Create your tests here.
+{"app_id": "group2saxion", "dev_id": "div1", "hardware_serial": "1234566754334353", "port": 1, "counter": 19,
+ "payload_raw": "eydrZXknOicxOTk5J30AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+ "metadata": {"time": "2021-04-03T13:37:18.416336182Z", "frequency": 867.1, "modulation": "LORA",
+              "data_rate": "SF7BW125", "coding_rate": "4/5", "gateways": [
+         {"gtw_id": "eui-b827ebfffe0ee7c9", "timestamp": 2812177115, "time": "2021-04-03T13:37:18.409409Z",
+          "channel": 3, "rssi": -102, "snr": -2.8, "rf_chain": 0, "latitude": 52.1865, "longitude": 5.9486,
+          "altitude": 65},
+         {"gtw_id": "ttn_apeldoorn_stadhuis", "timestamp": 648020419, "time": "2021-04-03T13:37:18.397686Z",
+          "channel": 0, "rssi": -119, "snr": -0.5, "rf_chain": 0, "latitude": 52.21583, "longitude": 5.9637284,
+          "altitude": 32},
+         {"gtw_id": "eui-0031552048001a03", "timestamp": 2605781067, "time": "2021-04-03T13:37:17.397694Z",
+          "channel": 3, "rssi": -116, "snr": 2.8, "rf_chain": 0, "latitude": 52.2221, "longitude": 5.99327,
+          "altitude": 51},
+         {"gtw_id": "ttn_apeldoorn_europaweg", "timestamp": 563091171, "time": "2021-04-03T13:37:18.397682Z",
+          "channel": 0, "rssi": -112, "snr": 4, "rf_chain": 0, "latitude": 52.196606, "longitude": 5.945808,
+          "altitude": 61},
+         {"gtw_id": "eui-0031552048001a06", "timestamp": 2065761179, "time": "", "channel": 3, "rssi": -111, "snr": 6,
+          "rf_chain": 0}]},
+ "downlink_url": "https://integrations.thethingsnetwork.org/ttn-eu/api/v2/down/group2saxion/http_test?key=ttn-account-v2.P7y2SrvlyW0cxgww446aAurVowOjpX6HOFbAZ_nZKSM"}
