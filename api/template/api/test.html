@@ -1,0 +1,118 @@
+<script>
+
+    let log = console.log;
+
+    function addingBytes(array) {
+        var new1 = (array[3] << 24) | (array[2] << 16) | (array[1] << 8) | array[0];
+        return new1;
+    }
+
+    const makeObjectData = (array) => {
+        let type = array[0];
+        let result = addingBytes(getArray(array, 1, 4));
+        return {data: {type, result}};
+    };
+
+    const makeObjectDate = (array) => {
+        let date = array[0];
+        let month = array[1] - 1;
+        let year = '20' + array[2];
+        let hour = array[3];
+        let minute = array[4];
+        let dateTime = new Date(year, month, date, hour, minute);
+        return {dateTime};
+    };
+
+    const makeObjectDroneId = (array) => {
+        let id = array[0];
+        return {droneId: id};
+    };
+
+    // var arrayInfo = [82,255,255,0,0,255,255,0,0, 84, 1, 22, 44, 77, 00 , 83 ,2,85,13,12,20,23,45]
+    const getArray = (array, startIndex, max) => {
+        var newArray = [];
+        for (let index = 0; index < max; index++) {
+            newArray.push(array[startIndex + index]);
+        }
+        return newArray;
+    };
+
+{#    for (int i = 3; i < Math.sqrt(n); i += 2) {#}
+{#    if (n % i == 0)#}
+{#        return false;#}
+{#}#}
+
+    function makeObjectLocation(array) {
+        let latitude = addingBytes(getArray(array, 0, 4)) / 10000;
+        let longitude = addingBytes(getArray(array, 4, 4)) / 10000;
+        return {location: {latitude, longitude}};
+    }
+
+    const conversion = (array) => {
+        // console.log(array);
+        let measurement = {};
+        for (let index = 0; index < array.length; index++) {
+            // location
+            if (array[index] === 82) {
+                // detecting longitude, latitude.
+                var newArray = getArray(array, index + 1, 8);
+                // log(makeObjectLocation(newArray));
+                measurement = {...measurement, ...makeObjectLocation(newArray)};
+                index += 8;
+            }
+            // dataTime
+            if (array[index] === 85) {
+                var newArray = getArray(array, index + 1, 5);
+                // log(makeObjectDate(newArray))
+                measurement = {...measurement, ...makeObjectDate(newArray)};
+                index += 5;
+            }
+            // droneId
+            if (array[index] === 83) {
+                var newArray = getArray(array, index + 1, 1);
+                // log(makeObjectDroneId(newArray));
+                measurement = {...measurement, ...makeObjectDroneId(newArray)};
+                index += 1;
+            }
+            // data
+            if (array[index] === 84) {
+                // detecting type, result.
+                var newArray = getArray(array, index + 1, 5);
+                // log(makeObjectData(newArray));
+                measurement = {...measurement, ...makeObjectData(newArray)};
+                index += 5;
+            }
+        }
+        // log(measurement)
+        return measurement;
+    };
+
+    // conversion(arrayInfo);
+
+
+    // Keyword – attributes
+    // Location: 82 = 10000010 = 1byte
+    // Longitude : 91 =10010001= 1byte
+    // Latitude : 92
+    // DroneId: 83
+    // Data: 84
+    // Type: 93
+    // Result: 94
+    // dateTime: 85
+    // “82”: {“91” : number, “92” : number}
+    // “85” : dateTime,
+    // “83” : String,
+    // “84” : [ { “93” : String, “94” : String } ]
+    // }
+
+</script>
+<script>
+    {% with True as flag %}
+        {% if flag %}
+            //do somethings
+            {% update_variable False as flag %}
+        {% else %}
+            //do somethings
+        {% endif %}
+    {% endwith %}
+</script>
