@@ -76,18 +76,19 @@ def get_drone_id_from_dev_id(serializer):
         return new_drone.id
 
 
-# Serializers define the API representation.
-class DroneSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Drone
-        fields = '__all__'
-
-
-# ViewSets define the view behavior.
-class DroneViewSet(viewsets.ModelViewSet):
-    queryset = Drone.objects.all()
-    serializer_class = DroneSerializer
-
+#
+# # Serializers define the API representation.
+# class DroneSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Drone
+#         fields = '__all__'
+#
+#
+# # ViewSets define the view behavior.
+# class DroneViewSet(viewsets.ModelViewSet):
+#     queryset = Drone.objects.all()
+#     serializer_class = DroneSerializer
+#
 
 # Serializers define the API representation.
 class MeasurementsSerializer(serializers.ModelSerializer):
@@ -104,7 +105,7 @@ class MeasurementsViewSet(viewsets.ModelViewSet):
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
-router.register(r'Drones', DroneViewSet)
+# router.register(r'Drones', DroneViewSet)
 router.register(r'Measurements', MeasurementsViewSet)
 
 
