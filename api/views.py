@@ -1,4 +1,5 @@
-import js2py
+from datetime import datetime
+
 from django.core.checks import register
 from django.shortcuts import render, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -23,12 +24,23 @@ def addData(request):
     print("payload_raw type:", type(key), ", value", key)
     # base64 decode
     payload_str = base64.b64decode(key).decode('UTF-8')
-    print("payload_to_base64")
+    print("payload_to_base64", str(payload_str))
     # ascii decode
     ascii = [ord(c) for c in payload_str]
     # binary = bin(int(binascii.hexlify(payload_str), 16))
     print("payload_to_ascii", ascii, ', Length: ', len(ascii))
-    print("measurements: ", conversion(ascii))
+    measurements_from_ttn = conversion(ascii)
+    print("measurements: ", measurements_from_ttn)
+
+    new_measurements = Measurements.objects.create(lat=measurements_from_ttn['location']['lat'],
+                                                   long=measurements_from_ttn['location']['long'],
+                                                   data_type=measurements_from_ttn['data']['type'],
+                                                   data_results=measurements_from_ttn['data']['results'],
+                                                   droneId=measurements_from_ttn['droneId'],
+                                                   date_entry=measurements_from_ttn['date_entry']
+                                                   )
+
+    new_measurements.save()
 
     # payload_str_test = str({"key": "1999"}).replace("'", '"')
 
@@ -78,57 +90,48 @@ class DroneViewSet(viewsets.ModelViewSet):
 
 
 # Serializers define the API representation.
-class MeasuresSerializer(serializers.ModelSerializer):
+class MeasurementsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Measures
+        model = Measurements
         fields = '__all__'
 
 
 # ViewSets define the view behavior.
-class MeasuresViewSet(viewsets.ModelViewSet):
-    queryset = Measures.objects.all()
-    serializer_class = MeasuresSerializer
+class MeasurementsViewSet(viewsets.ModelViewSet):
+    queryset = Measurements.objects.all()
+    serializer_class = MeasurementsSerializer
 
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
 router.register(r'Drones', DroneViewSet)
-router.register(r'Measures', MeasuresViewSet)
-
-# def conversion(li):
-#     block = ''
-#     if li[0] == 82:
-
-from datetime import datetime
+router.register(r'Measurements', MeasurementsViewSet)
 
 
 def makeObjectDate(array):
+    print("makeObjectDate:", array)
     date = array[0]
     month = array[1] - 1
-    year = '20' + str(array[2])
+    year = 20 + array[2]
     hour = array[3]
     minute = array[4]
     date_entry = str(date) + "/" + str(month) + "/" + str(year) + "|" + str(hour) + ":" + str(minute)
-    return {"date_entry": date_entry}
+
+    date1 = datetime(year, month, date, hour, minute, 0)
+
+    return {"date_entry": date1}
 
 
 def makeObjectDroneId(array):
+    print("makeObjectDroneId:", array)
     id = array[0]
-
     return {'droneId': id}
 
 
-"""
-
-for i in xrange(3, int(math.sqrt(n)), 2):  # use 'range' in Python 3
-    if n % i == 0:
-        return False
-"""
-
-
 def getArray(array, start_index, max):
+    print("getArray:", array)
+
     new_array = []
-    print("array, start_index, max:", array, start_index, max)
     index = 0
     while (index < max):
         new_array.append(array[start_index + index])
@@ -152,37 +155,35 @@ def makeObjectLocation(array):
 
 
 def makeObjectData(array):
+    print("makeObjectData: ", array)
     type = array[0]
     results = addingBytes(getArray(array, 1, 4))
     return {"data": {"type": type, "results": results}}
 
 
+# team2 encoding
 def conversion(array):
     measurements = {}
 
     for index in range(len(array)):
         if array[index] == 82:
             new_array = getArray(array, index + 1, 8)
-            print("82", new_array)
             measurements.update(makeObjectLocation(new_array))
             print(measurements)
             index += 8
         if array[index] == 85:
             new_array = getArray(array, index + 1, 5)
-            print("85", new_array)
             measurements.update(makeObjectDate(new_array))
             print(measurements)
             index += 5
         if array[index] == 83:
             new_array = getArray(array, index + 1, 1)
-            print("83", new_array)
             measurements.update(makeObjectDroneId(new_array))
             print(measurements)
 
             index += 1
         if array[index] == 84:
             new_array = getArray(array, index + 1, 5)
-            print("84", new_array)
             measurements.update(makeObjectData(new_array))
             print(measurements)
 

@@ -22,3 +22,11 @@ class Measures(models.Model):
     key = models.CharField(max_length=50, blank=True)  # PH
     value = models.CharField(max_length=50, blank=True)  # 7
 
+
+class Measurements(models.Model):
+    long = models.FloatField(blank=True, null=True)
+    lat = models.FloatField(blank=True, null=True)
+    data_type = models.IntegerField(blank=True, null=True)
+    data_results = models.FloatField(blank=True, null=True)
+    droneId = models.IntegerField(blank=True, null=True)
+    date_entry = models.DateTimeField(blank=True, null=True)
